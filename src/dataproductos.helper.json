@@ -139,6 +139,263 @@
             }
         ]
     },
+        {
+        "nombre": "Odyssey Mega",
+        "marca": "Armaf",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944839/odyssey_mega_armaf_f78dwb.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 16000
+            }
+        ]
+    },
+    {
+        "nombre": "Club de Nuit Intense",
+        "marca": "Armaf",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944837/club_de_nuit_fsr7ii.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 17000
+            }
+        ]
+    },
+    {
+        "nombre": "Club de Nuit Untold",
+        "marca": "Armaf",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944837/club_de_nuit_untold_suoqx6.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 17000
+            }
+        ]
+    },
+    {
+        "nombre": "Club de Nuit Iconic",
+        "marca": "Armaf",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944837/CLUB-DE-NUIT-ICONIC_quuz6l.jpg" , "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 17000
+            }
+        ]
+    },
+    {
+        "nombre": "9 pm",
+        "marca": "Afnan",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944835/9_pm_qxpa6d.webp", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 18000
+            }
+        ]
+    },
+    {
+        "nombre": "Turathi",
+        "marca": "Afnan",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944840/turathi_oa4gji.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 17000
+            }
+        ]
+    },
+    {
+        "nombre": "Honor and Glory",
+        "marca": "Lattafa",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944838/honor_and_glory_hwhe8j.webp", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 15000
+            }
+        ]
+    },
+    {
+        "nombre": "Le male Elixir",
+        "marca": "Jean Paul Gaultier",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944839/le_male_elixir_u2xzpn.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 28000
+            }
+        ]
+    },
+    {
+        "nombre": "Polo Blue",
+        "marca": "Ralph Lauren",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944839/polo-blue_aetwxl.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 20000
+            }
+        ]
+    },
+    {
+        "nombre": "Coral",
+        "marca": "Valentino",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944838/coral_hsvwua.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 32000
+            }
+        ]
+    },
+    {
+        "nombre": "Cedrat Boise",
+        "marca": "Mancera",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944837/cedrat_boise_bidzxy.webp", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": "25000"
+            }
+        ]
+    },
+    {
+        "nombre": "Arabians Tonka",
+        "marca": "Móntale",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944835/arabians_tonka_mqlcfr.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 32000
+            }
+        ]
+    },
+    {
+        "nombre": "Bad Boy",
+        "marca": "Carolina Herrera",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944836/bad_boy_carolina_herrera_xdip20.png", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 21000
+            }
+        ]
+    },
+    {
+        "nombre": "Scandal",
+        "marca": "Jean Paul Gaultier",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944839/scandal_kcwwxr.webp", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 27000
+            }
+        ]
+    },
+    {
+        "nombre": "Dylan Blue",
+        "marca": "Versace",
+        "genero": "Hombre",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944836/dylan_blue_dflsav.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 23000
+            }
+        ]
+    },
+    {
+        "nombre": "Santal 33",
+        "marca": "Le Labo",
+        "genero": "Unisex",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944840/santal_33_slrbmc.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 51000
+            }
+        ]
+    },
+    {
+        "nombre": "Erba Pura",
+        "marca": "Xerjoff",
+        "genero": "Unisex",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944836/erba_pura_bofht4.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 48500
+            },
+             {
+                "stock": 10,
+                "mililitros": "2.5",
+                "precio": 29000
+            }
+        ]
+    },
+    {
+        "nombre": "Light Blue",
+        "marca": "Dolce & Gabanna",
+        "genero": "Mujer",
+        "descripcion": "Fragancia redinada de Estocolmo, con escencia de cacao, mizcas de café, y abono de chancho.",
+        "imagenes": ["https://res.cloudinary.com/domaokdib/image/upload/f_auto/v1780944839/light_blue_ksytoi.jpg", "https://res.cloudinary.com/domaokdib/image/upload/v1785539610/DECANT_5_cczkfy.png"],
+        "variantes": [
+            {
+                "stock": 10,
+                "mililitros": "5",
+                "precio": 20000
+            }
+        ]
+    },
     {
         "nombre": "Olympea",
         "marca": "Paco Rabanne",

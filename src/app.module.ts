@@ -40,9 +40,11 @@ import { MailerModule } from '@nestjs-modules/mailer'
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      synchronize: true,
-      dropSchema: false,
-      entities: [Productos, Variantes, Usuarios, Venta, DetalleVentas]
+      synchronize: true, 
+      ssl: {
+        rejectUnauthorized: false, 
+      },
+      entities: [Productos, Variantes, Usuarios, Venta, DetalleVentas],
     }),
     JwtModule.register({
       global: true,
@@ -58,6 +60,6 @@ import { MailerModule } from '@nestjs-modules/mailer'
     AuthModule,
     CloudinaryModule,
     MercadoPagoModule,
-    ],
+  ],
 })
 export class AppModule { }
