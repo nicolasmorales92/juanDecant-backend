@@ -1,0 +1,10 @@
+export enum MetodoPago {
+  EFECTIVO = 'EFECTIVO',
+  MERCADO_PAGO = 'MERCADO_PAGO',
+}
+
+export enum EstadoVenta {
+  PENDIENTE_PAGO = 'PENDIENTE_PAGO',
+  CONCRETADA = 'CONCRETADA',
+  CANCELADA = 'CANCELADA',
+}
