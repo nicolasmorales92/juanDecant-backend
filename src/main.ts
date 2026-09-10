@@ -27,7 +27,7 @@ async function bootstrap() {
   const seeder = app.get(SeederService);
   await seeder.seederProductos();
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'https://juandecant.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
