@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CrearUsuarioDTO } from './dto/create-auth.dto';
 import { loginDTO } from './dto/login.dto';
@@ -32,7 +32,10 @@ export class AuthController {
   }
 
 
-  
+  @Get('confirmar-email')
+  async confirmarEmail(@Query('token') token: string) {
+    return await this.authService.confirmarEmail(token);
+  }
 
   @Post('restaurar-password')
   async restaurarContraseña(@Body() dto: RestaurarPasswordDto) {

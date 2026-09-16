@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsEnum, IsNotEmpty, IsString, IsStrongPassword, Matches } from "class-validator"
+import { IsEmail, IsEnum, IsNotEmpty, IsString, IsStrongPassword, Matches } from "class-validator"
 import { ProvinciasEnum } from "../../usuarios/enums/provincias.enum"
 import { BarriosBuenosAiresEnum } from "../../usuarios/enums/barriosBuenosAires.enum"
 import { BarriosCABAEnum } from "../../usuarios/enums/barriosCaba.enum"
@@ -23,7 +23,7 @@ export class CrearUsuarioDTO {
     @ApiProperty({
         example: 'juan@example.com'
     })
-    @IsString()
+    @IsEmail({}, { message: 'El formato del email no es válido' })
     @IsNotEmpty()
     email: string
 

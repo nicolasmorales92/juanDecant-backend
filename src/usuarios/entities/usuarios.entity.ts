@@ -9,30 +9,33 @@ export class Usuarios {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column({type: 'varchar', nullable: true, length:20})
+    @Column({ type: 'varchar', nullable: true, length: 20 })
     nombre: string
 
-    @Column({type: 'varchar', nullable: true, length:20})
+    @Column({ type: 'varchar', nullable: true, length: 20 })
     apellido: string
 
-    @Column({type: 'varchar', nullable: false, unique: true})
+    @Column({ type: 'varchar', nullable: false, unique: true })
     email: string
 
-    @Column({type: 'varchar', nullable: false})
+    @Column({ type: 'varchar', nullable: false })
     password: string
 
-    @Column({ type: 'enum', enum:ProvinciasEnum,  nullable: false})
+    @Column({ type: 'enum', enum: ProvinciasEnum, nullable: false })
     provincia: ProvinciasEnum
 
-    @Column({ type: 'enum', enum: TodasLasCiudadesEnum, nullable: false})
+    @Column({ type: 'enum', enum: TodasLasCiudadesEnum, nullable: false })
     ciudad: TodasLasCiudadesEnum
 
-    @Column({ type: 'varchar', nullable: true}) 
+    @Column({ type: 'varchar', nullable: true })
     calle: string;
 
-    @Column({type: 'enum', enum: RolesEnum, default: RolesEnum.USUARIO})
+    @Column({ type: 'enum', enum: RolesEnum, default: RolesEnum.USUARIO })
     rol: RolesEnum
 
-    @OneToMany(()=>Venta, (venta)=>venta.usuario)
+    @Column({ type: 'boolean', default: false })
+    estaVerificado: boolean;
+
+    @OneToMany(() => Venta, (venta) => venta.usuario)
     compras: Venta[]
 }

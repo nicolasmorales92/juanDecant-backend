@@ -8,47 +8,70 @@ import { ProvinciasEnum } from '../usuarios/enums/provincias.enum';
 import { loginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
+import { TodasLasCiudadesEnum } from '../usuarios/enums/todasLasCiudades.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Usuarios)
     private readonly usuarioRepositorio: Repository<Usuarios>,
-    private readonly jwtService : JwtService,
+    private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
-  )
-  {}
+  ) { }
   async crearUsuario(crearUsuarioDto: CrearUsuarioDTO) {
     const usuarioRepetido = await this.usuarioRepositorio.findOne({
-      where: {email: crearUsuarioDto.email}
-    })
-    
-    if(usuarioRepetido) throw new ConflictException('El email ya está en uso.')
-    
-    const contraseñaHasheada = await bcrypt.hash(crearUsuarioDto.password, 10)
-    const ciudad = crearUsuarioDto.ciudad 
+      where: { email: crearUsuarioDto.email }
+    });
+
+    if (usuarioRepetido) throw new ConflictException('El email ya está en uso.');
+
+    const contraseñaHasheada = await bcrypt.hash(crearUsuarioDto.password, 10);
+    const ciudad = crearUsuarioDto.ciudad as TodasLasCiudadesEnum
     const provincia = crearUsuarioDto.provincia as ProvinciasEnum
 
-    const usuarioNuevo = await this.usuarioRepositorio.create({
+    const usuarioNuevo = this.usuarioRepositorio.create({
       ...crearUsuarioDto,
       password: contraseñaHasheada,
       ciudad: ciudad,
-      provincia: provincia
-    })
+      provincia: provincia,
+      estaVerificado: false
+    });
 
-    return await this.usuarioRepositorio.save(usuarioNuevo)
+    const usuarioGuardado = await this.usuarioRepositorio.save(usuarioNuevo);
+
+    const tokenVerificacion = this.jwtService.sign(
+      { sub: usuarioGuardado.id, email: usuarioGuardado.email },
+      { secret: process.env.JWT_SECRET, expiresIn: '24h' }
+    );
+
+    const urlConfirmacion = `${process.env.FRONTEND_URL}/auth/confirmar-email?token=${encodeURIComponent(tokenVerificacion)}`;
+
+    await this.mailerService.sendMail({
+      to: usuarioGuardado.email,
+      subject: 'Confirma tu dirección de correo electrónico',
+      html: `
+      <p>Hola ${usuarioGuardado.nombre},</p>
+      <p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
+      <a href="${urlConfirmacion}">Verificar mi Email</a>
+    `
+    });
+
+    return usuarioGuardado;
   }
 
 
-  async login(login: loginDTO){
+  async login(login: loginDTO) {
     const usuario = await this.usuarioRepositorio.findOne({
-      where: {email: login.email}
+      where: { email: login.email }
     })
 
-    if(!usuario) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
+    if (!usuario) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
+    if (!usuario.estaVerificado) {
+      throw new BadRequestException('Debes verificar tu email antes de ingresar.');
+    }
 
     const contraseñaValida = await bcrypt.compare(login.password, usuario.password)
-    if(!contraseñaValida) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
+    if (!contraseñaValida) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
 
     const payload = {
       sub: usuario.id,
@@ -56,20 +79,36 @@ export class AuthService {
       rol: usuario.rol
     }
 
-    try{
+    try {
       const token = await this.jwtService.signAsync(payload)
-      return{
+      return {
         message: `Registro exítoso`,
         token
       }
     }
-    catch (error){
-        console.error("Error al firmar el token:", error);
-        throw new InternalServerErrorException('Error al generar el acceso');
+    catch (error) {
+      console.error("Error al firmar el token:", error);
+      throw new InternalServerErrorException('Error al generar el acceso');
     }
   }
 
 
+  // auth.service.ts
+  async confirmarEmail(token: string) {
+    try {
+      const payload = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
+      const usuario = await this.usuarioRepositorio.findOne({ where: { id: payload.sub } });
+
+      if (!usuario) throw new NotFoundException('Usuario no encontrado');
+
+      usuario.estaVerificado = true;
+      await this.usuarioRepositorio.save(usuario);
+
+      return { message: 'Email verificado con éxito. Ya podés iniciar sesión.' };
+    } catch (error) {
+      throw new BadRequestException('El token de confirmación es inválido o expiró.');
+    }
+  }
 
 
   async olvideMiContraseña(email: string) {
@@ -132,5 +171,5 @@ export class AuthService {
       throw new BadRequestException('El enlace es inválido o ha expirado.');
     }
   }
- 
+
 }
