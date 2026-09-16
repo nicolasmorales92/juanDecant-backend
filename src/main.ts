@@ -27,11 +27,11 @@ async function bootstrap() {
   const seeder = app.get(SeederService);
   await seeder.seederProductos();
   app.enableCors({
-    origin:  process.env.FRONTEND_URL || 'https://juandecant.vercel.app' || 'http://localhost:3000',
+    origin:  process.env.FRONTEND_URL || 'https://juanparfum.vercel.app' || 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-
+console.log('Conectado a la DB:', process.env.DATABASE_URL);
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
