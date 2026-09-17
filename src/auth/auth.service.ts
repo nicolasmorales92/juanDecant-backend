@@ -26,8 +26,8 @@ export class AuthService {
     if (usuarioRepetido) throw new ConflictException('El email ya está en uso.');
 
     const contraseñaHasheada = await bcrypt.hash(crearUsuarioDto.password, 10);
-    const ciudad = crearUsuarioDto.ciudad as TodasLasCiudadesEnum
-    const provincia = crearUsuarioDto.provincia as ProvinciasEnum
+    const ciudad = crearUsuarioDto.ciudad as TodasLasCiudadesEnum;
+    const provincia = crearUsuarioDto.provincia as ProvinciasEnum;
 
     const usuarioNuevo = this.usuarioRepositorio.create({
       ...crearUsuarioDto,
@@ -46,15 +46,20 @@ export class AuthService {
 
     const urlConfirmacion = `${process.env.FRONTEND_URL}/auth/confirmar-email?token=${encodeURIComponent(tokenVerificacion)}`;
 
-    await this.mailerService.sendMail({
-      to: usuarioGuardado.email,
-      subject: 'Confirma tu dirección de correo electrónico',
-      html: `
-      <p>Hola ${usuarioGuardado.nombre},</p>
-      <p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
-      <a href="${urlConfirmacion}">Verificar mi Email</a>
-    `
-    });
+    try {
+      await this.mailerService.sendMail({
+        to: usuarioGuardado.email,
+        subject: 'Confirma tu dirección de correo electrónico',
+        html: `
+        <p>Hola ${usuarioGuardado.nombre},</p>
+        <p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
+        <a href="${urlConfirmacion}">Verificar mi Email</a>
+      `
+      });
+      console.log(`Correo de verificación enviado exitosamente a: ${usuarioGuardado.email}`);
+    } catch (error) {
+      console.error('ERROR AL ENVIAR CORREO:', error);
+    }
 
     return usuarioGuardado;
   }

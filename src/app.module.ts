@@ -22,20 +22,25 @@ import { MailerModule } from '@nestjs-modules/mailer'
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-    MailerModule.forRoot({
-      transport: {
-        host: process.env.MAIL_HOST,
-        port: Number(process.env.MAIL_PORT) || 587,
-        secure: false,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
+    MailerModule.forRootAsync({
+  useFactory: () => ({
+    transport: {
+      host: process.env.MAIL_HOST,
+      port: Number(process.env.MAIL_PORT) || 587,
+      secure: Number(process.env.MAIL_PORT) === 465,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
-      defaults: {
-        from: '"Soporte" <no-reply@tu-dominio.com>',
+      tls: {
+        rejectUnauthorized: false,
       },
-    }),
+    },
+    defaults: {
+      from: `"Soporte" <${process.env.MAIL_USER}>`, 
+    },
+  }),
+}),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
