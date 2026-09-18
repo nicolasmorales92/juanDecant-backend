@@ -7,20 +7,26 @@ import * as bcrypt from 'bcrypt';
 import { ProvinciasEnum } from '../usuarios/enums/provincias.enum';
 import { loginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { MailerService } from '@nestjs-modules/mailer';
 import { TodasLasCiudadesEnum } from '../usuarios/enums/todasLasCiudades.enum';
+import { BrevoClient } from '@getbrevo/brevo';
 
 @Injectable()
 export class AuthService {
+  private brevo: BrevoClient;
+
   constructor(
     @InjectRepository(Usuarios)
     private readonly usuarioRepositorio: Repository<Usuarios>,
     private readonly jwtService: JwtService,
-    private readonly mailerService: MailerService,
-  ) { }
+  ) {
+    this.brevo = new BrevoClient({
+      apiKey: process.env.BREVO_API_KEY || '',
+    });
+  }
+
   async crearUsuario(crearUsuarioDto: CrearUsuarioDTO) {
     const usuarioRepetido = await this.usuarioRepositorio.findOne({
-      where: { email: crearUsuarioDto.email }
+      where: { email: crearUsuarioDto.email },
     });
 
     if (usuarioRepetido) throw new ConflictException('El email ya está en uso.');
@@ -34,69 +40,70 @@ export class AuthService {
       password: contraseñaHasheada,
       ciudad: ciudad,
       provincia: provincia,
-      estaVerificado: false
+      estaVerificado: false,
     });
 
     const usuarioGuardado = await this.usuarioRepositorio.save(usuarioNuevo);
 
     const tokenVerificacion = this.jwtService.sign(
       { sub: usuarioGuardado.id, email: usuarioGuardado.email },
-      { secret: process.env.JWT_SECRET, expiresIn: '24h' }
+      { secret: process.env.JWT_SECRET, expiresIn: '24h' },
     );
 
     const urlConfirmacion = `${process.env.FRONTEND_URL}/auth/confirmar-email?token=${encodeURIComponent(tokenVerificacion)}`;
 
     try {
-      await this.mailerService.sendMail({
-        to: usuarioGuardado.email,
+      await this.brevo.transactionalEmails.sendTransacEmail({
         subject: 'Confirma tu dirección de correo electrónico',
-        html: `
-        <p>Hola ${usuarioGuardado.nombre},</p>
-        <p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
-        <a href="${urlConfirmacion}">Verificar mi Email</a>
-      `
+        htmlContent: `
+          <p>Hola ${usuarioGuardado.nombre},</p>
+          <p>Por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
+          <a href="${urlConfirmacion}">Verificar mi Email</a>
+        `,
+        sender: {
+          name: 'Juan Parfum',
+          email: process.env.MAIL_USER || 'nicolaseduardomorales92@gmail.com',
+        },
+        to: [{ email: usuarioGuardado.email, name: usuarioGuardado.nombre }],
       });
       console.log(`Correo de verificación enviado exitosamente a: ${usuarioGuardado.email}`);
     } catch (error) {
-      console.error('ERROR AL ENVIAR CORREO:', error);
+      console.error('ERROR AL ENVIAR CORREO BREVO HTTP:', error);
     }
 
     return usuarioGuardado;
   }
 
-
   async login(login: loginDTO) {
     const usuario = await this.usuarioRepositorio.findOne({
-      where: { email: login.email }
-    })
+      where: { email: login.email },
+    });
 
-    if (!usuario) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
+    if (!usuario) throw new BadRequestException('Usuario y/o contraseña incorrecta.');
     if (!usuario.estaVerificado) {
       throw new BadRequestException('Debes verificar tu email antes de ingresar.');
     }
 
-    const contraseñaValida = await bcrypt.compare(login.password, usuario.password)
-    if (!contraseñaValida) throw new BadRequestException('Usuario y/o contraseña incorrecta.')
+    const contraseñaValida = await bcrypt.compare(login.password, usuario.password);
+    if (!contraseñaValida) throw new BadRequestException('Usuario y/o contraseña incorrecta.');
 
     const payload = {
       sub: usuario.id,
       id: usuario.id,
-      rol: usuario.rol
-    }
+      rol: usuario.rol,
+    };
 
     try {
-      const token = await this.jwtService.signAsync(payload)
+      const token = await this.jwtService.signAsync(payload);
       return {
-        message: `Registro exítoso`,
-        token
-      }
-    }
-    catch (error) {
-      console.error("Error al firmar el token:", error);
+        message: `Registro exitoso`,
+        token,
+      };
+    } catch (error) {
+      console.error('Error al firmar el token:', error);
       throw new InternalServerErrorException('Error al generar el acceso');
     }
   }
-
 
   async confirmarEmail(token: string) {
     try {
@@ -114,7 +121,6 @@ export class AuthService {
     }
   }
 
-
   async olvideMiContraseña(email: string) {
     const usuario = await this.usuarioRepositorio.findOne({ where: { email } });
 
@@ -130,29 +136,34 @@ export class AuthService {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
     const resetUrl = `${frontendUrl}/auth/restaurar-password?token=${encodeURIComponent(resetToken)}`;
 
-    await this.mailerService.sendMail({
-      to: usuario.email,
-      subject: 'Recuperación de contraseña',
-      html: `
-        <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <h2 style="color: #1a202c; text-align: center;">Restablecer contraseña</h2>
-          <p style="color: #4a5568;">Hola,</p>
-          <p style="color: #4a5568;">Has solicitado restablecer tu contraseña. Haz clic en el botón de abajo para ingresar una nueva clave (este enlace expira en 15 minutos):</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-              Restablecer Contraseña
-            </a>
+    try {
+      await this.brevo.transactionalEmails.sendTransacEmail({
+        subject: 'Recuperación de contraseña',
+        htmlContent: `
+          <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+            <h2 style="color: #1a202c; text-align: center;">Restablecer contraseña</h2>
+            <p style="color: #4a5568;">Hola,</p>
+            <p style="color: #4a5568;">Has solicitado restablecer tu contraseña. Haz clic en el botón de abajo para ingresar una nueva clave (este enlace expira en 15 minutos):</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetUrl}" style="background-color: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+                Restablecer Contraseña
+              </a>
+            </div>
+            <p style="color: #718096; font-size: 12px;">Si no solicitaste este cambio, podés ignorar este correo.</p>
           </div>
-          <p style="color: #718096; font-size: 12px;">Si no solicitaste este cambio, podés ignorar este correo.</p>
-        </div>
-      `,
-    });
+        `,
+        sender: {
+          name: 'Juan Parfum',
+          email: process.env.MAIL_USER || 'nicolaseduardomorales92@gmail.com',
+        },
+        to: [{ email: usuario.email, name: usuario.nombre }],
+      });
+    } catch (error) {
+      console.error('ERROR AL ENVIAR RECOVERY BREVO HTTP:', error);
+    }
 
     return { message: 'Si el correo está registrado, recibirás las instrucciones en tu bandeja de entrada.' };
   }
-
-
-
 
   async restaurarContraseña(token: string, newPass: string) {
     try {
@@ -175,5 +186,4 @@ export class AuthService {
       throw new BadRequestException('El enlace es inválido o ha expirado.');
     }
   }
-
 }

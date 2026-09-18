@@ -16,31 +16,10 @@ import { Venta } from './ventas/entities/venta.entity';
 import { DetalleVentas } from './detalle_ventas/entities/detalle_ventas.entity';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { MercadoPagoModule } from './mercado_pago/mercado_pago.module';
-import { MailerModule } from '@nestjs-modules/mailer'
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
-    MailerModule.forRootAsync({
-      useFactory: () => ({
-        transport: {
-          host: process.env.MAIL_HOST || 'smtp-relay.brevo.com',
-          port: Number(process.env.MAIL_PORT) || 587,
-          secure: false,
-          auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
-          },
-          tls: {
-            rejectUnauthorized: false,
-          },
-        },
-        defaults: {
-          from: `"Juan Parfum" <${process.env.MAIL_USER}>`,
-        },
-      }),
-    }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -54,7 +33,7 @@ import { MailerModule } from '@nestjs-modules/mailer'
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' }
+      signOptions: { expiresIn: '1h' },
     }),
     ProductosModule,
     UsuariosModule,
@@ -67,4 +46,4 @@ import { MailerModule } from '@nestjs-modules/mailer'
     MercadoPagoModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}
