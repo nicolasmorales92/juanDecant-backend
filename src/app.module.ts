@@ -25,9 +25,9 @@ import { MailerModule } from '@nestjs-modules/mailer'
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
-          host: process.env.MAIL_HOST,
-          port: 465,
-          secure: true,
+          host: process.env.MAIL_HOST || 'smtp-relay.brevo.com',
+          port: Number(process.env.MAIL_PORT) || 587,
+          secure: false,
           auth: {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASS,
@@ -37,7 +37,7 @@ import { MailerModule } from '@nestjs-modules/mailer'
           },
         },
         defaults: {
-          from: `"Soporte" <${process.env.MAIL_USER}>`,
+          from: `"Juan Parfum" <${process.env.MAIL_USER}>`,
         },
       }),
     }),
