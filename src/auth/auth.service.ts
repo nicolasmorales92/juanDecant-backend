@@ -98,7 +98,6 @@ export class AuthService {
   }
 
 
-  // auth.service.ts
   async confirmarEmail(token: string) {
     try {
       const payload = this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
