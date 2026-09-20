@@ -38,16 +38,28 @@ export class ProductosRepository {
         return await this.productosRepository.save(nuevoProducto)
     }
 
-    async buscar(skip?: number, take?: number, search?: string) {
+    async buscar(skip = 0, take = 20, search?: string) {
         const queryBuilder = this.productosRepository.createQueryBuilder('producto')
-            .leftJoinAndSelect('producto.variantes', 'variantes')
+            .select([
+                'producto.id',
+                'producto.nombre',
+                'producto.marca',
+                'producto.genero',
+                'producto.imagenes',
+                'producto.descripcion',
+                'variantes.id',
+                'variantes.precio',
+                'variantes.stock',
+                'variantes.mililitros',
+            ])
+            .leftJoin('producto.variantes', 'variantes')
+            .orderBy('producto.id', 'ASC')
             .skip(skip)
-            .take(take)
-            .orderBy('producto.id', 'ASC');
+            .take(take);
 
         if (search) {
             queryBuilder.where(
-                'producto.nombre ILIKE :search OR producto.marca ILIKE :search',
+                '(producto.nombre ILIKE :search OR producto.marca ILIKE :search)',
                 { search: `%${search}%` }
             );
         }
