@@ -38,24 +38,11 @@ export class ProductosRepository {
         return await this.productosRepository.save(nuevoProducto)
     }
 
-    async buscar(skip = 0, take = 20, search?: string) {
-        const queryBuilder = this.productosRepository.createQueryBuilder('producto')
-            .select([
-                'producto.id',
-                'producto.nombre',
-                'producto.marca',
-                'producto.genero',
-                'producto.imagenes',
-                'producto.descripcion',
-                'variantes.id',
-                'variantes.precio',
-                'variantes.stock',
-                'variantes.mililitros',
-            ])
-            .leftJoin('producto.variantes', 'variantes')
-            .orderBy('producto.id', 'ASC')
-            .skip(skip)
-            .take(take);
+
+
+
+    async buscar(skip = 0, take = 6, search?: string) {
+        const queryBuilder = this.productosRepository.createQueryBuilder('producto');
 
         if (search) {
             queryBuilder.where(
@@ -64,8 +51,27 @@ export class ProductosRepository {
             );
         }
 
-        return await queryBuilder.getMany();
+        const idsResult = await queryBuilder
+            .select('producto.id')
+            .orderBy('producto.id', 'ASC')
+            .skip(skip)
+            .take(take)
+            .getMany();
+
+        if (idsResult.length === 0) {
+            return [];
+        }
+
+        const ids = idsResult.map(p => p.id);
+
+        return await this.productosRepository.createQueryBuilder('producto')
+            .leftJoinAndSelect('producto.variantes', 'variantes')
+            .where('producto.id IN (:...ids)', { ids })
+            .orderBy('producto.id', 'ASC')
+            .getMany();
     }
+
+
 
 
     async buscarPorCategoria(genero: string, page: number = 1, limit: number = 6, search?: string) {

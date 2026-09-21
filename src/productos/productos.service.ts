@@ -25,6 +25,8 @@ export class ProductosService {
     return await this.productosRepository.crear(createProductoDto)
   }
 
+  
+
   async buscar(page?: number, limit?: number, search?: string) {
     if (page && limit) {
       const skip = (page - 1) * limit
